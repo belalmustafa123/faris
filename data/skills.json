@@ -1,0 +1,22 @@
+{
+  "python": ["بايثون", "python"],
+  "sql": ["قواعد البيانات", "sql"],
+  "excel": ["اكسل", "إكسل", "excel"],
+  "communication": ["التواصل", "مهارات التواصل"],
+  "research": ["البحث العلمي"],
+  "teaching": ["التدريس"],
+  "data analysis": ["تحليل البيانات"],
+  "machine learning": ["تعلم الآلة", "التعلم الآلي"],
+  "artificial intelligence": ["الذكاء الاصطناعي"],
+  "networking": ["الشبكات"],
+  "cybersecurity": ["الأمن السيبراني"],
+  "english": ["اللغة الإنكليزية"],
+  "project management": ["إدارة المشاريع"],
+  "accounting": ["المحاسبة"],
+  "autocad": ["أوتوكاد"],
+  "gis": ["نظم المعلومات الجغرافية"],
+  "plc": ["برمجة PLC"],
+  "javascript": ["جافاسكربت"],
+  "marketing": ["التسويق"],
+  "law writing": ["الكتابة القانونية"]
+}

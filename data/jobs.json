@@ -1,0 +1,55 @@
+[
+  {"id":"j_med_1","title":"طبيب عام","family":"med","sector":"الصحة","skills":["مهارات التواصل","مهارات مختبرية","اللغة الإنجليزية"],"level":"junior","description":"تشخيص وعلاج المرضى في المراكز الصحية والمستشفيات."},
+  {"id":"j_med_2","title":"طبيب اختصاص","family":"med","sector":"الصحة","skills":["البحث العلمي","مهارات التواصل","اللغة الإنجليزية"],"level":"senior","description":"اختصاص بعد البورد في الطب الباطني أو الجراحة."},
+  {"id":"j_med_3","title":"محاضر في كلية الطب","family":"med","sector":"التعليم العالي","skills":["التدريس","البحث العلمي","اللغة الإنجليزية"],"level":"senior","description":"تدريس طلبة الطب والمساهمة في البحث الأكاديمي."},
+
+  {"id":"j_pharm_1","title":"صيدلاني مستشفى","family":"pharm","sector":"الصحة","skills":["مهارات مختبرية","مهارات التواصل","اللغة الإنجليزية"],"level":"entry","description":"إدارة وصرف الأدوية في المستشفيات."},
+  {"id":"j_pharm_2","title":"صيدلاني مجتمع","family":"pharm","sector":"الصيدلة","skills":["مهارات التواصل","المحاسبة"],"level":"entry","description":"العمل في صيدلية أهلية وتقديم الاستشارة الدوائية."},
+  {"id":"j_pharm_3","title":"مندوب علمي","family":"pharm","sector":"شركات الأدوية","skills":["اللغة الإنجليزية","مهارات التواصل","التسويق"],"level":"junior","description":"تسويق الأدوية للأطباء والصيدليات."},
+
+  {"id":"j_dent_1","title":"طبيب أسنان","family":"dent","sector":"الصحة","skills":["مهارات التواصل","مهارات مختبرية"],"level":"entry","description":"تشخيص وعلاج مشاكل الأسنان في عيادة أو مركز صحي."},
+  {"id":"j_dent_2","title":"أخصائي تقويم أسنان","family":"dent","sector":"الصحة","skills":["البحث العلمي","مهارات التواصل"],"level":"senior","description":"تقويم الأسنان بعد الدراسات العليا."},
+
+  {"id":"j_nurse_1","title":"ممرض عناية مركزة","family":"nurse","sector":"الصحة","skills":["مهارات التواصل","مهارات مختبرية"],"level":"entry","description":"رعاية المرضى ذوي الحالات الحرجة."},
+  {"id":"j_nurse_2","title":"مدرس تمريض","family":"nurse","sector":"التعليم","skills":["التدريس","مهارات التواصل"],"level":"mid","description":"تدريس طلبة التمريض في المعاهد والكليات."},
+
+  {"id":"j_health_1","title":"فني مختبرات طبية","family":"health","sector":"الصحة","skills":["مهارات مختبرية","اللغة الإنجليزية"],"level":"entry","description":"إجراء التحاليل المخبرية في المستشفيات والمختبرات."},
+  {"id":"j_health_2","title":"مهندس أجهزة طبية","family":"health","sector":"الأجهزة الطبية","skills":["اللغة الإنجليزية","مهارات مختبرية"],"level":"junior","description":"صيانة وتشغيل الأجهزة الطبية في المستشفيات."},
+
+  {"id":"j_cs_1","title":"مطور ويب","family":"cs","sector":"تقنية المعلومات","skills":["JavaScript","SQL","اللغة الإنجليزية"],"level":"junior","description":"بناء تطبيقات ويب حديثة بـHTML/CSS/JS."},
+  {"id":"j_cs_2","title":"محلل بيانات","family":"cs","sector":"تقنية وأعمال","skills":["python","SQL","excel","data analysis"],"level":"junior","description":"تحليل البيانات واستخراج الرؤى لاتخاذ القرار."},
+  {"id":"j_cs_3","title":"مختص شبكات","family":"cs","sector":"تقنية المعلومات","skills":["networking","cybersecurity"],"level":"junior","description":"إدارة وصيانة شبكات المؤسسات."},
+  {"id":"j_cs_4","title":"مهندس تعلم آلة","family":"cs","sector":"تقنية المعلومات","skills":["python","machine learning","data analysis"],"level":"mid","description":"بناء نماذج تعلم آلة لخدمة المنتجات الرقمية."},
+
+  {"id":"j_ceng_1","title":"مهندس برمجيات","family":"ceng","sector":"تقنية المعلومات","skills":["python","SQL","networking"],"level":"junior","description":"تطوير وصيانة أنظمة برمجية معقدة."},
+  {"id":"j_ceng_2","title":"مختص أمن سيبراني","family":"ceng","sector":"الأمن المعلوماتي","skills":["cybersecurity","networking","python"],"level":"junior","description":"حماية الأنظمة والشبكات من الهجمات."},
+  {"id":"j_ceng_3","title":"مهندس ذكاء اصطناعي","family":"ceng","sector":"تقنية المعلومات","skills":["python","machine learning","data analysis"],"level":"mid","description":"تطوير أنظمة ذكية قائمة على التعلم العميق."},
+
+  {"id":"j_elec_1","title":"مهندس كهرباء","family":"elec","sector":"الطاقة","skills":["autocad","project management"],"level":"junior","description":"تشغيل وصيانة أنظمة الكهرباء."},
+  {"id":"j_elec_2","title":"مهندس اتصالات","family":"elec","sector":"الاتصالات","skills":["networking","english"],"level":"junior","description":"تصميم وصيانة شبكات الاتصالات."},
+
+  {"id":"j_civil_1","title":"مهندس مدني","family":"civil","sector":"الإنشاءات","skills":["autocad","project management"],"level":"junior","description":"تصميم وإشراف على المشاريع الإنشائية."},
+  {"id":"j_civil_2","title":"مهندس معماري","family":"civil","sector":"العمارة","skills":["autocad"],"level":"junior","description":"تصميم المباني والفراغات المعمارية."},
+
+  {"id":"j_mech_1","title":"مهندس ميكانيك","family":"mech","sector":"الصناعة","skills":["autocad","project management"],"level":"junior","description":"تصميم وصيانة الأنظمة الميكانيكية."},
+  {"id":"j_mech_2","title":"مهندس عمليات","family":"mech","sector":"الصناعة والنفط","skills":["excel","english"],"level":"junior","description":"إدارة العمليات في المصافي والمصانع."},
+
+  {"id":"j_oil_1","title":"مهندس نفط","family":"oil","sector":"النفط والغاز","skills":["english","project management","gis"],"level":"junior","description":"العمل في حقول النفط والغاز."},
+  {"id":"j_oil_2","title":"مهندس سلامة","family":"oil","sector":"النفط والغاز","skills":["project management","excel"],"level":"junior","description":"تطبيق معايير السلامة المهنية في الحقول."},
+
+  {"id":"j_law_1","title":"محامٍ","family":"law","sector":"القانون","skills":["communication","research"],"level":"junior","description":"الترافع وإعداد المذكرات القانونية."},
+  {"id":"j_law_2","title":"مستشار قانوني","family":"law","sector":"القانون","skills":["communication","english"],"level":"mid","description":"تقديم الاستشارات القانونية للشركات."},
+
+  {"id":"j_biz_1","title":"محاسب","family":"biz","sector":"المالية","skills":["accounting","excel","communication"],"level":"entry","description":"إعداد القوائم المالية والمحاسبية."},
+  {"id":"j_biz_2","title":"محلل مالي","family":"biz","sector":"المصارف","skills":["excel","data analysis","communication"],"level":"junior","description":"تحليل الأداء المالي للشركات والمصارف."},
+  {"id":"j_biz_3","title":"مدير مشاريع","family":"biz","sector":"إدارة الأعمال","skills":["project management","communication","english"],"level":"mid","description":"إدارة المشاريع من التخطيط إلى التسليم."},
+
+  {"id":"j_edu_1","title":"مدرس","family":"edu","sector":"التعليم","skills":["teaching","communication"],"level":"entry","description":"تدريس الطلبة في المدارس الحكومية والأهلية."},
+  {"id":"j_edu_2","title":"مصمم مناهج","family":"edu","sector":"التعليم","skills":["teaching","research"],"level":"mid","description":"تطوير المناهج التعليمية."},
+
+  {"id":"j_media_1","title":"محرر صحفي","family":"media","sector":"الإعلام","skills":["communication","english"],"level":"junior","description":"كتابة وتحرير المحتوى الإخباري."},
+  {"id":"j_media_2","title":"مصمم جرافيك","family":"media","sector":"الإعلام الرقمي","skills":["communication"],"level":"junior","description":"تصميم المواد المرئية للتسويق والإعلام."},
+
+  {"id":"j_agr_1","title":"مهندس زراعي","family":"agr","sector":"الزراعة","skills":["gis","research","project management"],"level":"junior","description":"الإشراف على المشاريع الزراعية."},
+  {"id":"j_agr_2","title":"مختص أغذية","family":"agr","sector":"الصناعات الغذائية","skills":["excel","research"],"level":"junior","description":"ضبط الجودة في مصانع الأغذية."}
+]

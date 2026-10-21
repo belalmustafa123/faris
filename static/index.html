@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b2340">
+<title>بوصلة الخريج | نظام ذكي للتوصية بالوظائف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f9fc;--card:#fff;--ink:#0b2340;--tx:#1a2c42;--mu:#64748b;
+  --primary:#2563eb;--primary-2:#1d4ed8;--gold:#d4a017;
+  --ok:#10b981;--ok-bg:#dcfce7;--warn:#f59e0b;--bad:#ef4444;--bad-bg:#fee2e2;
+  --bd:#e2e8f0;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);
+  --shadow-lg:0 10px 30px rgba(37,99,235,.12);
+  --radius:14px;--radius-sm:8px;
+  --header-bg:linear-gradient(135deg,#0b2340,#1e40af 60%,#2563eb);
+}
+[data-theme="dark"]{
+  --bg:#0b1220;--card:#111a2e;--ink:#e8eef7;--tx:#cbd5e1;--mu:#94a3b8;
+  --bd:#1e293b;--ok-bg:#064e3b;--bad-bg:#4c1d1d;
+  --header-bg:linear-gradient(135deg,#050a14,#0b1a33 60%,#1e3a8a);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.7 'Cairo',sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+header{
+  background:var(--header-bg);
+  color:#fff;padding:24px 20px 28px;position:relative;overflow:hidden;transition:background .3s;
+}
+header::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,rgba(212,160,23,.25),transparent 50%),
+             radial-gradient(circle at 20% 80%,rgba(99,102,241,.2),transparent 50%);
+  pointer-events:none;
+}
+header .wrap{max-width:1100px;margin:0 auto;position:relative;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:16px;flex:1;min-width:200px}
+.brand h1{font-size:1.7rem;font-weight:800;letter-spacing:.2px;line-height:1.2}
+.brand p{color:#c7d2fe;font-size:.85rem;margin-top:2px}
+.logo{
+  width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.15);
+  display:grid;place-items:center;font-size:1.8rem;backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:transform .2s;
+  user-select:none;flex-shrink:0;
+}
+.logo:hover{transform:scale(1.05)}
+.logo:active{transform:scale(.95)}
+.header-controls{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.ctrl-btn{
+  padding:9px 14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  color:#fff;border-radius:10px;font:inherit;font-weight:600;cursor:pointer;
+  backdrop-filter:blur(10px);transition:all .2s;display:inline-flex;align-items:center;gap:6px;
+  font-size:.85rem;
+}
+.ctrl-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
+select.ctrl-btn{padding-right:28px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23fff' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+select.ctrl-btn option{background:var(--card);color:var(--ink)}
+
+nav{
+  background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:50;
+  overflow-x:auto;scrollbar-width:none;transition:background .3s;
+}
+nav::-webkit-scrollbar{display:none}
+nav .wrap{max-width:1100px;margin:0 auto;display:flex;gap:4px;padding:0 12px}
+nav button{
+  padding:14px 16px;background:none;border:0;color:var(--mu);font:700 .85rem 'Cairo',sans-serif;
+  cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;
+}
+nav button:hover{color:var(--ink)}
+nav button.on{color:var(--primary);border-color:var(--primary)}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+section{display:none;animation:fadeIn .35s ease}
+section.on{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px;transition:background .3s,border-color .3s}
+.card h2{font-size:1.3rem;color:var(--ink);margin-bottom:6px}
+.card h3{font-size:1.1rem;color:var(--ink);margin-top:16px}
+.card .sub{color:var(--mu);font-size:.85rem;margin-bottom:16px}
+
+label{display:block;font-weight:600;font-size:.85rem;color:var(--ink);margin-bottom:6px}
+select,input[type=text],input[type=search],input[type=url],input[type=password],textarea{
+  width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;
+  background:var(--bg);color:var(--tx);font:inherit;transition:all .2s;font-family:inherit;
+}
+select:focus,input:focus,textarea:focus{
+  outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,.1);
+}
+textarea{resize:vertical;min-height:100px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;
+  border:1.5px solid var(--bd);border-radius:10px;background:var(--card);
+  color:var(--tx);font:700 .88rem 'Cairo',sans-serif;cursor:pointer;transition:all .2s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary:hover{background:var(--primary-2);box-shadow:var(--shadow-lg)}
+.btn.good{background:var(--ok);color:#fff;border-color:var(--ok)}
+.btn.bad{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{
+  padding:8px 14px;border:1.5px solid var(--bd);border-radius:999px;
+  background:var(--card);color:var(--tx);font:600 .82rem 'Cairo',sans-serif;
+  cursor:pointer;transition:all .2s;
+}
+.chip:hover{border-color:var(--primary);color:var(--primary)}
+.chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.job{
+  border:1px solid var(--bd);border-radius:var(--radius);padding:20px;
+  margin-bottom:14px;background:var(--card);transition:all .2s;
+}
+.job:hover{box-shadow:var(--shadow-lg);transform:translateX(-3px)}
+.job .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:10px}
+.job h3{color:var(--ink);font-size:1.1rem;font-weight:800}
+.job .score{
+  min-width:76px;padding:10px 12px;border-radius:12px;text-align:center;
+  font-weight:800;font-size:1.4rem;line-height:1;
+}
+.score.high{background:var(--ok-bg);color:#166534}
+.score.mid{background:#fef3c7;color:#92400e}
+.score.low{background:#f1f5f9;color:var(--mu)}
+[data-theme="dark"] .score.mid{background:#451a03;color:#fbbf24}
+[data-theme="dark"] .score.low{background:#1e293b;color:#94a3b8}
+.bar{height:8px;background:var(--bd);border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#60a5fa);transition:width .8s ease}
+.tag{
+  display:inline-block;padding:4px 12px;border-radius:999px;
+  background:rgba(37,99,235,.08);color:var(--primary);font-size:.78rem;font-weight:700;
+  margin:2px 4px 2px 0;
+}
+.tag.ok{background:rgba(16,185,129,.1);color:var(--ok)}
+.tag.bad{background:rgba(239,68,68,.1);color:var(--bad)}
+.breakdown{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+@media(max-width:600px){.breakdown{grid-template-columns:repeat(2,1fr)}}
+.breakdown div{
+  background:var(--bg);padding:8px 6px;border-radius:8px;text-align:center;
+  font-size:.75rem;color:var(--mu);
+}
+.breakdown b{display:block;color:var(--ink);font-size:.95rem;margin-top:2px}
+
+.empty{text-align:center;padding:50px 20px;color:var(--mu)}
+.empty::before{content:"🔍";font-size:2.5rem;display:block;margin-bottom:8px;opacity:.6}
+
+.chat-container{display:flex;flex-direction:column;height:560px}
+.chat-messages{
+  flex:1;overflow-y:auto;padding:16px;background:var(--bg);border-radius:12px;
+  margin-bottom:12px;display:flex;flex-direction:column;gap:10px;
+}
+.msg{
+  max-width:80%;padding:12px 16px;border-radius:16px;line-height:1.75;
+  white-space:pre-wrap;word-wrap:break-word;font-size:.9rem;
+}
+.msg.user{align-self:flex-start;background:var(--primary);color:#fff;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-end;background:var(--card);border:1px solid var(--bd);border-bottom-left-radius:4px}
+.msg.bot b{color:var(--primary)}
+.chat-input{display:flex;gap:8px}
+.chat-input input{flex:1}
+.suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.suggestions button{
+  padding:6px 12px;font-size:.8rem;border:1px solid var(--bd);border-radius:999px;
+  background:var(--card);color:var(--mu);cursor:pointer;transition:all .2s;
+}
+.suggestions button:hover{border-color:var(--primary);color:var(--primary)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:720px){.kpi-grid{grid-template-columns:1fr 1fr}}
+.kpi{
+  background:linear-gradient(135deg,rgba(37,99,235,.06),rgba(96,165,250,.06));
+  border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:center;
+}
+.kpi strong{display:block;font-size:1.6rem;color:var(--primary);font-weight:800}
+.kpi span{font-size:.8rem;color:var(--mu)}
+
+.dir-item{padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.dir-item:last-child{border-bottom:0}
+.dir-item .name{font-weight:700;color:var(--ink)}
+.dir-item .type{font-size:.75rem;padding:2px 8px;border-radius:999px;background:rgba(37,99,235,.1);color:var(--primary);font-weight:700}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{
+  padding:12px 18px;border-radius:10px;background:var(--ink);color:var(--bg);
+  font-size:.85rem;box-shadow:var(--shadow-lg);animation:toastIn .3s ease;
+  max-width:340px;border-left:4px solid var(--gold);
+}
+.toast.ok{border-color:var(--ok)}
+.toast.bad{border-color:var(--bad)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.modal-backdrop{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-backdrop.show{display:flex}
+.modal-box{
+  background:var(--card);padding:32px;border-radius:16px;max-width:420px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fadeIn .3s ease;
+}
+.modal-box h2{margin-bottom:20px;color:var(--primary)}
+
+.admin-panel{display:none;position:fixed;inset:0;background:var(--bg);z-index:9998;overflow-y:auto;padding:24px}
+.admin-panel.show{display:block}
+.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.admin-header h1{color:var(--primary);font-size:1.6rem}
+.admin-post{padding:16px;border:1px solid var(--bd);border-radius:10px;margin-bottom:12px;background:var(--card)}
+.admin-post .head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+footer{text-align:center;padding:20px;color:var(--mu);font-size:.8rem;border-top:1px solid var(--bd);margin-top:20px}
+.smallmuted{color:var(--mu);font-size:.82rem}
+hr{border:0;border-top:1px solid var(--bd);margin:20px 0}
+
+@media(max-width:720px){
+  .brand h1{font-size:1.4rem}
+  .brand p{font-size:.78rem}
+  .logo{width:46px;height:46px;font-size:1.5rem}
+  .ctrl-btn{padding:7px 10px;font-size:.8rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" id="mainLogo" title="بوصلة الخريج">🧭</div>
+      <div>
+        <h1 data-i18n="app_title">بوصلة الخريج</h1>
+        <p data-i18n="app_subtitle">نظام ذكي للتوصية بالوظائف لخريجي الجامعات العراقية</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="ctrl-btn" id="theme-toggle" title="الوضع الليلي">🌙 <span data-i18n="dark">ليلي</span></button>
+      <select class="ctrl-btn" id="lang-select" title="اللغة">
+        <option value="ar">🇮🇶 العربية</option>
+        <option value="ku">🏳️ کوردی</option>
+        <option value="en">🇬🇧 English</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <button class="on" data-tab="home"><span data-i18n="nav_home">🏠 الرئيسية</span></button>
+    <button data-tab="recommend"><span data-i18n="nav_recommend">🎯 التوصيات</span></button>
+    <button data-tab="chat"><span data-i18n="nav_chat">💬 المساعد الذكي</span></button>
+    <button data-tab="directory"><span data-i18n="nav_directory">📚 دليل الجامعات</span></button>
+    <button data-tab="jobs"><span data-i18n="nav_jobs">💼 الوظائف</span></button>
+    <button data-tab="announcements"><span data-i18n="nav_announcements">📢 إعلانات العمل</span></button>
+    <button data-tab="about"><span data-i18n="nav_about">ℹ️ عن النظام</span></button>
+  </div>
+</nav>
+
+<main>
+<section id="home" class="on">
+  <div class="card" style="text-align:center;padding:40px 24px">
+    <h2 style="font-size:1.7rem;margin-bottom:12px" data-i18n="home_hello">مرحبًا بك في بوصلة الخريج 🎓</h2>
+    <p class="sub" style="font-size:1rem;margin-bottom:24px" data-i18n="home_desc">نظام ذكي يحلّل ملفك المهني، ويرشّح لك الوظائف الأنسب، مع شرح كامل لكل توصية.</p>
+    <div class="kpi-grid">
+      <div class="kpi"><strong id="kpi-unis">—</strong><span data-i18n="kpi_universities">جامعة</span></div>
+      <div class="kpi"><strong id="kpi-jobs">—</strong><span data-i18n="kpi_jobs">وظيفة مرشّحة</span></div>
+      <div class="kpi"><strong>TF-IDF</strong><span data-i18n="kpi_engine">محرك التوصية</span></div>
+      <div class="kpi"><strong>RAG</strong><span data-i18n="kpi_assistant">المساعد الذكي</span></div>
+    </div>
+    <div style="margin-top:28px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn primary" onclick="goTab('recommend')" data-i18n="btn_start">ابدأ التوصية</button>
+      <button class="btn" onclick="goTab('chat')" data-i18n="btn_ask">اسأل المساعد</button>
+    </div>
+  </div>
+</section>
+
+<section id="recommend">
+  <div class="card">
+    <h2 data-i18n="rec_step1">١. اختر تخصصك</h2>
+    <p class="sub" data-i18n="rec_step1_desc">اختر الجامعة ثم الكلية ثم القسم</p>
+    <div class="grid3">
+      <div><label data-i18n="lbl_uni">الجامعة</label><select id="sel-uni"></select></div>
+      <div><label data-i18n="lbl_col">الكلية</label><select id="sel-col"></select></div>
+      <div><label data-i18n="lbl_dep">القسم</label><select id="sel-dep"></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="rec_step2">٢. ملفك المهني</h2>
+    <p class="sub" data-i18n="rec_step2_desc">كلما زادت التفاصيل، كانت التوصيات أدق</p>
+    <div class="grid2">
+      <div>
+        <label data-i18n="lbl_exp">الخبرة الحالية</label>
+        <select id="p-exp">
+          <option value="none" data-i18n="exp_none">لم أعمل بعد</option>
+          <option value="academic" data-i18n="exp_academic">مشاريع جامعية فقط</option>
+          <option value="junior" data-i18n="exp_junior">أقل من سنة</option>
+          <option value="mid" data-i18n="exp_mid">1–3 سنوات</option>
+          <option value="senior" data-i18n="exp_senior">أكثر من 3 سنوات</option>
+        </select>
+      </div>
+      <div>
+        <label data-i18n="lbl_sector">القطاع المفضل</label>
+        <select id="p-sector">
+          <option value="any" data-i18n="sec_any">لا تفضيل</option>
+          <option value="health" data-i18n="sec_health">الصحة</option>
+          <option value="tech" data-i18n="sec_tech">التقنية</option>
+          <option value="education" data-i18n="sec_education">التعليم</option>
+          <option value="business" data-i18n="sec_business">الأعمال والمصارف</option>
+          <option value="engineering" data-i18n="sec_engineering">الهندسة والنفط</option>
+          <option value="law" data-i18n="sec_law">القانون</option>
+          <option value="media" data-i18n="sec_media">الإعلام</option>
+          <option value="agriculture" data-i18n="sec_agriculture">الزراعة</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <label data-i18n="lbl_interest">اهتمامك أو هدفك القصير</label>
+      <input type="text" id="p-interest" data-i18n-placeholder="ph_interest" placeholder="مثال: تحليل البيانات" maxlength="180">
+    </div>
+    <div style="margin-top:18px">
+      <label data-i18n="lbl_skills">اختر مهاراتك</label>
+      <div class="chips" id="skills-container"></div>
+    </div>
+    <div style="margin-top:22px">
+      <button class="btn primary" id="btn-recommend" data-i18n="btn_generate">🎯 توليد التوصيات</button>
+    </div>
+  </div>
+  <div id="recommendations"></div>
+</section>
+
+<section id="chat">
+  <div class="card">
+    <h2 data-i18n="chat_title">💬 المساعد الذكي</h2>
+    <p class="sub" data-i18n="chat_desc">اسأل عن الوظائف، المهارات، الجامعات، أو كيف تبدأ.</p>
+    <div class="chat-container">
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg bot">
+          مرحبًا بك في <b>بوصلة الخريج</b>!<br>
+          أنا مساعدك الذكي، صُممت لخدمة خريجي الجامعات العراقية.<br><br>
+          يمكنك سؤالي عن:
+          <br>• ما وظائف تخصصي؟
+          <br>• ما المهارات المطلوبة؟
+          <br>• كيف أبدأ مساري المهني؟
+          <br>• عن الجامعات والتخصصات
+          <br>• عن مطوّر النظام
+        </div>
+      </div>
+      <div class="suggestions" id="chat-suggestions">
+        <button data-q="ما وظائف خريجي هندسة الحاسوب؟" data-i18n="sug1">وظائف هندسة الحاسوب</button>
+        <button data-q="ما المهارات المطلوبة لمحلل بيانات؟" data-i18n="sug2">مهارات محلل البيانات</button>
+        <button data-q="كيف أبدأ في مجال الأمن السيبراني؟" data-i18n="sug3">كيف أبدأ؟</button>
+        <button data-q="من صمم هذا النظام؟" data-i18n="sug4">من المطور؟</button>
+      </div>
+      <form class="chat-input" id="chat-form">
+        <input type="text" id="chat-input" data-i18n-placeholder="ph_chat" placeholder="اكتب سؤالك هنا..." autocomplete="off" required>
+        <button class="btn primary" type="submit" data-i18n="btn_send">إرسال</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="directory">
+  <div class="card">
+    <h2 data-i18n="dir_title">📚 دليل الجامعات</h2>
+    <p class="sub" data-i18n="dir_desc">بيانات مستخرجة من دليل الطالب الرسمي 2026–2027</p>
+    <input type="search" id="dir-search" data-i18n-placeholder="ph_search" placeholder="ابحث عن جامعة أو كلية أو قسم...">
+  </div>
+  <div class="card" id="dir-results"><div class="empty" data-i18n="empty_search">ابدأ بالبحث</div></div>
+</section>
+
+<section id="jobs">
+  <div class="card">
+    <h2 data-i18n="jobs_title">💼 قاعدة الوظائف النموذجية</h2>
+    <p class="sub" data-i18n="jobs_desc">وظائف إرشادية وليست إعلانات شاغرة</p>
+    <div class="grid2">
+      <div><label data-i18n="lbl_filter">فلترة بالقطاع</label><input type="text" id="job-filter" data-i18n-placeholder="ph_filter" placeholder="مثال: الصحة"></div>
+      <div><label data-i18n="lbl_count">عدد النتائج</label><select id="job-limit"><option>10</option><option selected>20</option><option>50</option></select></div>
+    </div>
+  </div>
+  <div id="jobs-list"></div>
+</section>
+
+<section id="announcements">
+  <div class="card">
+    <h2 data-i18n="ann_title">📢 إعلانات العمل</h2>
+    <p class="sub" data-i18n="ann_desc">إعلانات شاغرة يضيفها الزوار بعد مراجعتها من قبل الإدارة.</p>
+    <div id="announcements-list"><div class="empty" data-i18n="loading">جارٍ التحميل...</div></div>
+  </div>
+  <div class="card">
+    <h3 data-i18n="ann_add">➕ أضف إعلانك</h3>
+    <p class="sub" data-i18n="ann_add_desc">سيتم مراجعة إعلانك من قبل الإدارة قبل نشره.</p>
+    <form id="job-post-form">
+      <div class="grid2">
+        <div><label data-i18n="lbl_ann_title">عنوان الإعلان *</label><input type="text" id="jp-title" required maxlength="200" placeholder="مطور ويب مبتدئ"></div>
+        <div><label data-i18n="lbl_ann_type">نوع الإعلان *</label><input type="text" id="jp-type" required maxlength="100" placeholder="وظيفة شاغرة"></div>
+      </div>
+      <div style="margin-top:12px"><label data-i18n="lbl_ann_spec">التخصص المطلوب</label><input type="text" id="jp-specialty" maxlength="200" placeholder="هندسة حاسوب"></div>
+      <div style="margin-top:12px"><label data-i18n="lbl_ann_details">تفاصيل الإعلان *</label><textarea id="jp-details" required maxlength="2000" rows="4"></textarea></div>
+      <div class="grid2" style="margin-top:12px">
+        <div><label data-i18n="lbl_ann_contact">رقم التواصل</label><input type="text" id="jp-contact" maxlength="200" placeholder="07XXXXXXXXX"></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn primary" type="submit" style="width:100%" data-i18n="btn_submit_ann">📤 إرسال للمراجعة</button></div>
+      </div>
+    </form>
+    <p id="jp-status" class="smallmuted" aria-live="polite" style="margin-top:10px"></p>
+  </div>
+</section>
+
+<section id="about">
+  <div class="card">
+    <h2 data-i18n="about_title">عن النظام</h2>
+    <p data-i18n="about_desc">بوصلة الخريج هو نظام ذكي للتوصية بالوظائف لخريجي الجامعات العراقية، صُمم لمساعدة الخريجين على اكتشاف المسار المهني الأنسب.</p>
+
+    <h3 style="color:var(--primary)" data-i18n="about_dev">👨‍💻 المطور</h3>
+    <ul style="line-height:2;padding-inline-start:20px;margin-top:8px" id="about-dev-list">
+      <li><b>الاسم الكامل:</b> فراس هذال وسمي</li>
+      <li><b>المكان الحالي:</b> العراق، محافظة ديالى</li>
+      <li><b>الجامعة:</b> جامعة ديالى</li>
+      <li><b>الكلية:</b> كلية التربية للعلوم الصرفة</li>
+      <li><b>القسم:</b> قسم الحاسبات والذكاء الاصطناعي</li>
+    </ul>
+
+    <h3 style="color:var(--primary)" data-i18n="about_tech">🧠 التقنيات المستخدمة</h3>
+    <p>Python • FastAPI • scikit-learn (TF-IDF + Cosine Similarity) • SQLite • HTML/CSS/JS</p>
+
+    <h3 style="color:var(--primary)" data-i18n="about_how">🎯 كيف يعمل النظام</h3>
+    <p data-i18n="about_how1"><b>١. محرك التوصية:</b> يحوّل وصف كل وظيفة إلى متجه رياضي بـ TF-IDF، ثم يحسب التشابه الجيبي بين ملف الخريج وكل وظيفة.</p>
+    <p style="margin-top:8px" data-i18n="about_how2"><b>٢. المساعد الذكي:</b> يصنّف نية السؤال، ويسترجع الإجابة من قاعدة معرفة واسعة، ويلجأ للبحث في الإنترنت عند الحاجة.</p>
+
+    <h3 style="color:var(--primary)" data-i18n="about_limits">⚠️ حدود النظام</h3>
+    <p data-i18n="about_limit1">• الوظائف النموذجية إرشادية وليست إعلانات شاغرة.</p>
+    <p data-i18n="about_limit2">• إعلانات العمل يضيفها الزوار وتُراجع من قبل الإدارة.</p>
+    <p data-i18n="about_limit3">• المساعد الذكي يعمل محليًا وقد يستعين بالإنترنت عند الحاجة.</p>
+  </div>
+</section>
+</main>
+
+<footer data-i18n="footer">
+  بوصلة الخريج © 2026 • مشروع تخرج للطالب فراس هذال وسمي — جامعة ديالى
+</footer>
+
+<div class="toast-stack" id="toast-stack"></div>
+
+<!-- Admin Modal -->
+<div id="admin-modal" class="modal-backdrop">
+  <div class="modal-box">
+    <h2>🔐 دخول المطور</h2>
+    <form id="admin-login-form">
+      <div style="margin-bottom:12px"><label>اسم المستخدم</label><input type="text" id="admin-user" required autocomplete="username"></div>
+      <div style="margin-bottom:20px"><label>كلمة المرور</label><input type="password" id="admin-pass" required autocomplete="current-password"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn primary" type="submit" style="flex:1">دخول</button>
+        <button class="btn" type="button" onclick="closeAdminModal()" style="flex:1">إلغاء</button>
+      </div>
+    </form>
+    <p id="admin-login-status" class="smallmuted" style="margin-top:12px;text-align:center"></p>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="admin-panel" class="admin-panel">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="admin-header">
+      <h1>🛠️ لوحة تحكم المطور</h1>
+      <button class="btn" onclick="closeAdminPanel()">🚪 خروج</button>
+    </div>
+    <div class="card">
+      <h2>⏳ إعلانات معلقة</h2>
+      <p class="sub">إعلانات جديدة تحتاج مراجعتك قبل النشر</p>
+      <div id="admin-pending-list"><div class="empty">جارٍ التحميل...</div></div>
+    </div>
+    <div class="card">
+      <h2>✅ إعلانات معتمدة</h2>
+      <p class="sub">إعلانات منشورة حاليًا للزوار — يمكنك حذفها في أي وقت</p>
+      <div id="admin-approved-list"><div class="empty">جارٍ التحميل...</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const api = p => fetch(p).then(r => r.json());
+const apiPost = (p, d, h = {}) => fetch(p, {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json', ...h},
+  body: JSON.stringify(d)
+}).then(r => r.json());
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toast(msg, kind=''){
+  const t = document.createElement('div');
+  t.className = 'toast ' + kind;
+  t.textContent = msg;
+  $('#toast-stack').appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+/* ============================================================
+   Theme Toggle
+   ============================================================ */
+const savedTheme = localStorage.getItem('compass_theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+function updateThemeIcon(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const span = $('#theme-toggle span');
+  const icon = cur === 'dark' ? '☀️' : '🌙';
+  $('#theme-toggle').firstChild.textContent = icon + ' ';
+  if(span) span.textContent = cur === 'dark' ? 'نهاري' : 'ليلي';
+}
+
+$('#theme-toggle').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('compass_theme', next);
+  updateThemeIcon();
+};
+updateThemeIcon();
+
+/* ============================================================
+   i18n
+   ============================================================ */
+const I18N = {
+  ar: {
+    app_title: "بوصلة الخريج",
+    app_subtitle: "نظام ذكي للتوصية بالوظائف لخريجي الجامعات العراقية",
+    dark: "ليلي", light: "نهاري",
+    nav_home: "🏠 الرئيسية", nav_recommend: "🎯 التوصيات", nav_chat: "💬 المساعد الذكي",
+    nav_directory: "📚 دليل الجامعات", nav_jobs: "💼 الوظائف",
+    nav_announcements: "📢 إعلانات العمل", nav_about: "ℹ️ عن النظام",
+    home_hello: "مرحبًا بك في بوصلة الخريج 🎓",
+    home_desc: "نظام ذكي يحلّل ملفك المهني، ويرشّح لك الوظائف الأنسب، مع شرح كامل لكل توصية.",
+    kpi_universities: "جامعة", kpi_jobs: "وظيفة مرشّحة",
+    kpi_engine: "محرك التوصية", kpi_assistant: "المساعد الذكي",
+    btn_start: "ابدأ التوصية", btn_ask: "اسأل المساعد",
+    rec_step1: "١. اختر تخصصك", rec_step1_desc: "اختر الجامعة ثم الكلية ثم القسم",
+    rec_step2: "٢. ملفك المهني", rec_step2_desc: "كلما زادت التفاصيل، كانت التوصيات أدق",
+    lbl_uni: "الجامعة", lbl_col: "الكلية", lbl_dep: "القسم",
+    lbl_exp: "الخبرة الحالية", lbl_sector: "القطاع المفضل",
+    exp_none: "لم أعمل بعد", exp_academic: "مشاريع جامعية", exp_junior: "أقل من سنة",
+    exp_mid: "1–3 سنوات", exp_senior: "أكثر من 3 سنوات",
+    sec_any: "لا تفضيل", sec_health: "الصحة", sec_tech: "التقنية", sec_education: "التعليم",
+    sec_business: "الأعمال", sec_engineering: "الهندسة", sec_law: "القانون",
+    sec_media: "الإعلام", sec_agriculture: "الزراعة",
+    lbl_interest: "اهتمامك أو هدفك", ph_interest: "مثال: تحليل البيانات",
+    lbl_skills: "اختر مهاراتك", btn_generate: "🎯 توليد التوصيات",
+    chat_title: "💬 المساعد الذكي", chat_desc: "اسأل عن الوظائف، المهارات، الجامعات",
+    ph_chat: "اكتب سؤالك هنا...", btn_send: "إرسال",
+    sug1: "وظائف هندسة الحاسوب", sug2: "مهارات محلل البيانات",
+    sug3: "كيف أبدأ؟", sug4: "من المطور؟",
+    dir_title: "📚 دليل الجامعات", dir_desc: "بيانات دليل الطالب الرسمي 2026–2027",
+    ph_search: "ابحث عن جامعة أو كلية أو قسم...", empty_search: "ابدأ بالبحث",
+    jobs_title: "💼 الوظائف النموذجية", jobs_desc: "وظائف إرشادية وليست إعلانات شاغرة",
+    lbl_filter: "فلترة بالقطاع", ph_filter: "مثال: الصحة", lbl_count: "عدد النتائج",
+    ann_title: "📢 إعلانات العمل", ann_desc: "إعلانات يضيفها الزوار بعد مراجعة الإدارة",
+    loading: "جارٍ التحميل...",
+    ann_add: "➕ أضف إعلانك", ann_add_desc: "سيتم مراجعة إعلانك قبل النشر",
+    lbl_ann_title: "عنوان الإعلان *", lbl_ann_type: "نوع الإعلان *",
+    lbl_ann_spec: "التخصص المطلوب", lbl_ann_details: "تفاصيل الإعلان *",
+    lbl_ann_contact: "رقم التواصل", btn_submit_ann: "📤 إرسال للمراجعة",
+    about_title: "عن النظام",
+    about_desc: "بوصلة الخريج هو نظام ذكي للتوصية بالوظائف لخريجي الجامعات العراقية.",
+    about_dev: "👨‍💻 المطور", about_tech: "🧠 التقنيات",
+    about_how: "🎯 كيف يعمل النظام", about_limits: "⚠️ حدود النظام",
+    about_how1: "١. محرك التوصية: TF-IDF + Cosine Similarity.",
+    about_how2: "٢. المساعد الذكي: RAG محلي + بحث ويب.",
+    about_limit1: "• الوظائف النموذجية إرشادية.",
+    about_limit2: "• إعلانات العمل تُراجع من الإدارة.",
+    about_limit3: "• المساعد يستعين بالإنترنت عند الحاجة.",
+    footer: "بوصلة الخريج © 2026 • مشروع تخرج للطالب فراس هذال وسمي — جامعة ديالى"
+  },
+  ku: {
+    app_title: "بوصلة الخریج",
+    app_subtitle: "سیستەمێکی زیرەک بۆ پێشنیارکردنی کار بۆ دەرچووانی زانکۆکانی عێراق",
+    dark: "شەوانە", light: "ڕۆژانە",
+    nav_home: "🏠 سەرەکی", nav_recommend: "🎯 پێشنیارەکان", nav_chat: "💬 یاریدەدەری زیرەک",
+    nav_directory: "📚 ڕێبەری زانکۆکان", nav_jobs: "💼 کارەکان",
+    nav_announcements: "📢 ڕاگەیاندنی کار", nav_about: "ℹ️ دەربارەی سیستەم",
+    home_hello: "بەخێربێیت بۆ بوصلة الخریج 🎓",
+    home_desc: "سیستەمێکی زیرەک کە پرۆفایلی پیشەییت شیدەکات و باشترین کارەکان پێشنیار دەکات.",
+    kpi_universities: "زانکۆ", kpi_jobs: "کار پێشنیارکراو",
+    kpi_engine: "بزوێنەری پێشنیار", kpi_assistant: "یاریدەدەری زیرەک",
+    btn_start: "دەستپێکردنی پێشنیار", btn_ask: "لە یاریدەدەر بپرسە",
+    rec_step1: "١. پسپۆڕی خۆت هەڵبژێرە", rec_step1_desc: "زانکۆ، کۆلێژ، پاشان بەش",
+    rec_step2: "٢. پرۆفایلی پیشەیی", rec_step2_desc: "هەرچەند زانیاری زیاتر، پێشنیارەکان باشترن",
+    lbl_uni: "زانکۆ", lbl_col: "کۆلێژ", lbl_dep: "بەش",
+    lbl_exp: "ئەزموونی ئێستا", lbl_sector: "کەرتی دڵخواز",
+    exp_none: "هێشتا کارم نەکردووە", exp_academic: "پرۆژەی زانکۆیی", exp_junior: "کەمتر لە ساڵێک",
+    exp_mid: "١–٣ ساڵ", exp_senior: "زیاتر لە ٣ ساڵ",
+    sec_any: "هیچ", sec_health: "تەندروستی", sec_tech: "تەکنەلۆژیا", sec_education: "پەروەردە",
+    sec_business: "بازرگانی", sec_engineering: "ئەندازیاری", sec_law: "یاسا",
+    sec_media: "ڕاگەیاندن", sec_agriculture: "کشتوکاڵ",
+    lbl_interest: "حەز یان ئامانج", ph_interest: "بۆ نموونە: شیکاری داتا",
+    lbl_skills: "کارامەییەکانت هەڵبژێرە", btn_generate: "🎯 دروستکردنی پێشنیارەکان",
+    chat_title: "💬 یاریدەدەری زیرەک", chat_desc: "لەبارەی کار، کارامەیی، زانکۆکان بپرسە",
+    ph_chat: "پرسیارەکەت بنووسە...", btn_send: "ناردن",
+    sug1: "کارەکانی ئەندازیاری کۆمپیوتەر", sug2: "کارامەیی شیکەری داتا",
+    sug3: "چۆن دەست پێبکەم؟", sug4: "دروستکەر کێیە؟",
+    dir_title: "📚 ڕێبەری زانکۆکان", dir_desc: "داتای فەرمی 2026–2027",
+    ph_search: "گەڕان بۆ زانکۆ، کۆلێژ، بەش...", empty_search: "دەست بە گەڕان بکە",
+    jobs_title: "💼 کارە نموونەییەکان", jobs_desc: "کارە ڕێنماییەکان، نەک ڕاگەیاندنی ڕاستەقینە",
+    lbl_filter: "فلتەر بەپێی کەرت", ph_filter: "بۆ نموونە: تەندروستی", lbl_count: "ژمارەی ئەنجام",
+    ann_title: "📢 ڕاگەیاندنی کار", ann_desc: "سەردانکەران زیاددەکەن پاش پێداچوونەوە",
+    loading: "بارکردن...",
+    ann_add: "➕ ڕاگەیاندنێک زیادبکە", ann_add_desc: "پێداچوونەوە دەکرێت پێش بڵاوکردنەوە",
+    lbl_ann_title: "ناونیشانی ڕاگەیاندن *", lbl_ann_type: "جۆری ڕاگەیاندن *",
+    lbl_ann_spec: "پسپۆڕی داواکراو", lbl_ann_details: "وردەکاری *",
+    lbl_ann_contact: "ژمارەی پەیوەندی", btn_submit_ann: "📤 ناردن بۆ پێداچوونەوە",
+    about_title: "دەربارەی سیستەم",
+    about_desc: "بوصلة الخریج سیستەمێکی زیرەکە بۆ پێشنیارکردنی کار.",
+    about_dev: "👨‍💻 دروستکەر", about_tech: "🧠 تەکنەلۆژیاکان",
+    about_how: "🎯 چۆن کاردەکات", about_limits: "⚠️ سنوورەکان",
+    about_how1: "١. بزوێنەری پێشنیار: TF-IDF + Cosine Similarity.",
+    about_how2: "٢. یاریدەدەری زیرەک: RAG + گەڕانی وێب.",
+    about_limit1: "• کارە نموونەییەکان ڕێنمایین.",
+    about_limit2: "• ڕاگەیاندنەکان لەلایەن بەڕێوەبەرایەتی پێداچوونەوە دەکرێن.",
+    about_limit3: "• یاریدەدەر لەوانەیە ئینتەرنێت بەکاربهێنێت.",
+    footer: "بوصلة الخریج © 2026 • پرۆژەی دەرچوون — فراس هذال وسمی — زانکۆی دیالا"
+  },
+  en: {
+    app_title: "Graduate Compass",
+    app_subtitle: "Smart Job Recommendation System for Iraqi University Graduates",
+    dark: "Dark", light: "Light",
+    nav_home: "🏠 Home", nav_recommend: "🎯 Recommendations", nav_chat: "💬 AI Assistant",
+    nav_directory: "📚 University Directory", nav_jobs: "💼 Jobs",
+    nav_announcements: "📢 Job Announcements", nav_about: "ℹ️ About",
+    home_hello: "Welcome to Graduate Compass 🎓",
+    home_desc: "A smart system that analyzes your profile and recommends the best jobs with full explanation.",
+    kpi_universities: "Universities", kpi_jobs: "Recommended Jobs",
+    kpi_engine: "Recommendation Engine", kpi_assistant: "AI Assistant",
+    btn_start: "Start Recommendation", btn_ask: "Ask the Assistant",
+    rec_step1: "1. Choose your specialty", rec_step1_desc: "Pick university, then college, then department",
+    rec_step2: "2. Your Professional Profile", rec_step2_desc: "The more details, the better the recommendations",
+    lbl_uni: "University", lbl_col: "College", lbl_dep: "Department",
+    lbl_exp: "Current Experience", lbl_sector: "Preferred Sector",
+    exp_none: "No experience yet", exp_academic: "Academic projects", exp_junior: "Less than 1 year",
+    exp_mid: "1–3 years", exp_senior: "More than 3 years",
+    sec_any: "No preference", sec_health: "Health", sec_tech: "Tech", sec_education: "Education",
+    sec_business: "Business", sec_engineering: "Engineering", sec_law: "Law",
+    sec_media: "Media", sec_agriculture: "Agriculture",
+    lbl_interest: "Your interest or goal", ph_interest: "e.g. Data analysis",
+    lbl_skills: "Choose your skills", btn_generate: "🎯 Generate Recommendations",
+    chat_title: "💬 AI Assistant", chat_desc: "Ask about jobs, skills, universities",
+    ph_chat: "Type your question...", btn_send: "Send",
+    sug1: "Computer engineering jobs", sug2: "Data analyst skills",
+    sug3: "How to start?", sug4: "Who developed it?",
+    dir_title: "📚 University Directory", dir_desc: "Official student guide data 2026–2027",
+    ph_search: "Search university, college, department...", empty_search: "Start searching",
+    jobs_title: "💼 Sample Jobs", jobs_desc: "Guidance only, not real vacancies",
+    lbl_filter: "Filter by sector", ph_filter: "e.g. Health", lbl_count: "Results",
+    ann_title: "📢 Job Announcements", ann_desc: "User-submitted, reviewed by admin",
+    loading: "Loading...",
+    ann_add: "➕ Post an Announcement", ann_add_desc: "Reviewed before publishing",
+    lbl_ann_title: "Announcement title *", lbl_ann_type: "Type *",
+    lbl_ann_spec: "Required specialty", lbl_ann_details: "Details *",
+    lbl_ann_contact: "Contact", btn_submit_ann: "📤 Submit for Review",
+    about_title: "About",
+    about_desc: "Graduate Compass is a smart job recommendation system for Iraqi graduates.",
+    about_dev: "👨‍💻 Developer", about_tech: "🧠 Technologies",
+    about_how: "🎯 How it Works", about_limits: "⚠️ Limitations",
+    about_how1: "1. Recommendation Engine: TF-IDF + Cosine Similarity.",
+    about_how2: "2. AI Assistant: Local RAG + Web Search.",
+    about_limit1: "• Sample jobs are illustrative only.",
+    about_limit2: "• Announcements are reviewed by admin.",
+    about_limit3: "• Assistant may use the internet when needed.",
+    footer: "Graduate Compass © 2026 • Graduation project by Faris Hithal Wasmi — University of Diyala"
+  }
+};
+
+let currentLang = localStorage.getItem('compass_lang') || 'ar';
+
+function applyLang(lang){
+  currentLang = lang;
+  localStorage.setItem('compass_lang', lang);
+  const dict = I18N[lang] || I18N.ar;
+  
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+  
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if(dict[key]) el.textContent = dict[key];
+  });
+  
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if(dict[key]) el.placeholder = dict[key];
+  });
+  
+  // Update theme toggle label
+  updateThemeIcon();
+  
+  $('#lang-select').value = lang;
+}
+
+$('#lang-select').onchange = (e) => applyLang(e.target.value);
+
+/* ============================================================
+   Navigation
+   ============================================================ */
+function goTab(id){
+  $$('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+  $$('main section').forEach(s => s.classList.toggle('on', s.id === id));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+$$('nav button').forEach(b => b.onclick = () => goTab(b.dataset.tab));
+
+/* ============================================================
+   Global state
+   ============================================================ */
+let currentFamily = '';
+let selectedSkills = new Set();
+let adminToken = localStorage.getItem('compass_admin_token') || null;
+
+/* ============================================================
+   Init
+   ============================================================ */
+async function init(){
+  try {
+    const [unis, skills, jobs] = await Promise.all([
+      api('/api/universities'),
+      api('/api/skills'),
+      api('/api/jobs')
+    ]);
+    $('#kpi-unis').textContent = unis.length;
+    $('#kpi-jobs').textContent = jobs.length;
+    renderUniversities(unis);
+    renderSkills();
+    loadJobs();
+    loadAnnouncements();
+  } catch(e){
+    console.error(e);
+    toast('فشل الاتصال بالخادم', 'bad');
+  }
+}
+
+function renderUniversities(unis){
+  const sel = $('#sel-uni');
+  sel.innerHTML = '<option value="">— اختر جامعة —</option>' +
+    unis.map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('');
+  sel.onchange = loadColleges;
+}
+
+async function loadColleges(){
+  const uid = $('#sel-uni').value;
+  const sel = $('#sel-col');
+  if(!uid){ sel.innerHTML = '<option>—</option>'; $('#sel-dep').innerHTML = '<option>—</option>'; return; }
+  try {
+    const cols = await api(`/api/colleges/${uid}`);
+    sel.innerHTML = '<option value="">— اختر كلية —</option>' +
+      cols.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    sel.onchange = loadDepartments;
+    $('#sel-dep').innerHTML = '<option>—</option>';
+  } catch(e){ toast('فشل تحميل الكليات', 'bad'); }
+}
+
+async function loadDepartments(){
+  const cid = $('#sel-col').value;
+  const sel = $('#sel-dep');
+  if(!cid){ sel.innerHTML = '<option>—</option>'; return; }
+  try {
+    const deps = await api(`/api/departments/${cid}`);
+    sel.innerHTML = '<option value="">— اختر قسم —</option>' +
+      deps.map(d => `<option value="${d.id}" data-family="${esc(d.family)}">${esc(d.name)}</option>`).join('');
+    sel.onchange = () => {
+      const opt = sel.options[sel.selectedIndex];
+      currentFamily = opt.dataset.family || '';
+    };
+  } catch(e){ toast('فشل تحميل الأقسام', 'bad'); }
+}
+
+function renderSkills(){
+  const allSkills = [
+    'python','SQL','excel','data analysis','JavaScript','networking','cybersecurity',
+    'autocad','project management','gis','english','communication','research',
+    'teaching','accounting','marketing','machine learning','artificial intelligence',
+    'PLC','مهارات مختبرية','اللغة الإنجليزية','مهارات التواصل','البحث العلمي','التدريس',
+    'المحاسبة','التسويق','إدارة المشاريع','تحليل البيانات','الذكاء الاصطناعي'
+  ];
+  const container = $('#skills-container');
+  container.innerHTML = allSkills.map(s =>
+    `<button type="button" class="chip" data-skill="${esc(s)}">${esc(s)}</button>`
+  ).join('');
+  container.onclick = e => {
+    const b = e.target.closest('.chip');
+    if(!b) return;
+    const s = b.dataset.skill;
+    if(selectedSkills.has(s)){ selectedSkills.delete(s); b.classList.remove('on'); }
+    else { selectedSkills.add(s); b.classList.add('on'); }
+  };
+}
+
+/* ============================================================
+   Recommendations
+   ============================================================ */
+$('#btn-recommend').onclick = async () => {
+  if(!currentFamily){ toast('اختر القسم أولًا', 'bad'); return; }
+  const payload = {
+    family: currentFamily,
+    skills: [...selectedSkills],
+    interest: $('#p-interest').value.trim(),
+    experience: $('#p-exp').value,
+    sector: $('#p-sector').value
+  };
+  const btn = $('#btn-recommend');
+  btn.disabled = true; const originalText = btn.textContent;
+  btn.textContent = '⏳ جارٍ التحليل...';
+  try {
+    const res = await apiPost('/api/recommend', payload);
+    renderRecommendations(res.recommendations);
+    toast(`تم توليد ${res.count} توصية`, 'ok');
+  } catch(e){ toast('فشل توليد التوصيات', 'bad'); }
+  finally { btn.disabled = false; btn.textContent = originalText; }
+};
+
+function renderRecommendations(list){
+  const root = $('#recommendations');
+  if(!list.length){
+    root.innerHTML = '<div class="card"><div class="empty">لا توجد وظائف مطابقة</div></div>';
+    return;
+  }
+  root.innerHTML = `<div class="card">
+    <h2>٣. التوصيات (${list.length})</h2>
+    <p class="sub">مرتبة حسب درجة الملاءمة</p>
+  </div>` + list.map((j, i) => {
+    const cls = j.score >= 75 ? 'high' : j.score >= 50 ? 'mid' : 'low';
+    const missing = j.missing_skills && j.missing_skills.length
+      ? `<span class="tag bad">ناقص: ${esc(j.missing_skills.join('، '))}</span>` : '';
+    const matched = j.matched_skills && j.matched_skills.length
+      ? `<span class="tag ok">متطابق: ${esc(j.matched_skills.join('، '))}</span>` : '';
+    return `<div class="job">
+      <div class="top">
+        <div>
+          <span class="tag">#${i+1}</span>
+          <h3>${esc(j.title)}</h3>
+          <p style="color:var(--mu);font-size:.85rem;margin-top:4px">${esc(j.sector)} • ${esc(j.level || 'junior')}</p>
+        </div>
+        <div class="score ${cls}">${j.score}%</div>
+      </div>
+      <div class="bar"><i style="width:${j.score}%"></i></div>
+      <div class="breakdown">
+        <div>تشابه دلالي<b>${j.breakdown.semantic}%</b></div>
+        <div>مهارات<b>${j.breakdown.skills}%</b></div>
+        <div>تخصص<b>${j.breakdown.family}%</b></div>
+        <div>خبرة<b>${j.breakdown.experience}%</b></div>
+        <div>قطاع<b>${j.breakdown.sector}%</b></div>
+      </div>
+      ${matched}${missing}
+      <p style="margin-top:10px;font-size:.85rem;color:var(--mu)">${esc(j.description || '')}</p>
+    </div>`;
+  }).join('');
+}
+
+/* ============================================================
+   Chat
+   ============================================================ */
+$('#chat-form').onsubmit = async e => {
+  e.preventDefault();
+  const input = $('#chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  appendMsg('user', msg);
+  input.value = '';
+  // مؤشر كتابة
+  const typing = document.createElement('div');
+  typing.className = 'msg bot';
+  typing.innerHTML = '<i>يكتب...</i>';
+  $('#chat-messages').appendChild(typing);
+  $('#chat-messages').scrollTop = 999999;
+  try {
+    const res = await apiPost('/api/chat', {message: msg});
+    typing.remove();
+    appendMsg('bot', res.reply);
+  } catch(e){
+    typing.remove();
+    appendMsg('bot', 'عذرًا، حدث خطأ في الاتصال.');
+  }
+};
+
+$('#chat-suggestions').onclick = e => {
+  const b = e.target.closest('button');
+  if(!b) return;
+  $('#chat-input').value = b.dataset.q;
+  $('#chat-form').dispatchEvent(new Event('submit'));
+};
+
+function appendMsg(role, text){
+  const container = $('#chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+/* ============================================================
+   Directory
+   ============================================================ */
+let dirTimer;
+$('#dir-search').oninput = e => {
+  clearTimeout(dirTimer);
+  const q = e.target.value.trim();
+  if(q.length < 2){ $('#dir-results').innerHTML = '<div class="empty">اكتب حرفين على الأقل</div>'; return; }
+  dirTimer = setTimeout(async () => {
+    try { renderDir(await api(`/api/search?q=${encodeURIComponent(q)}`)); }
+    catch(e){ toast('فشل البحث', 'bad'); }
+  }, 300);
+};
+
+function renderDir(items){
+  if(!items.length){ $('#dir-results').innerHTML = '<div class="empty">لا نتائج</div>'; return; }
+  $('#dir-results').innerHTML = items.map(r => `
+    <div class="dir-item">
+      <div>
+        <div class="name">${esc(r.name)}</div>
+        ${r.parent ? `<div style="font-size:.82rem;color:var(--mu)">${esc(r.parent)}</div>` : ''}
+      </div>
+      <span class="type">${esc(r.type)}</span>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   Jobs
+   ============================================================ */
+async function loadJobs(){
+  try {
+    const list = await api('/api/jobs');
+    window.__allJobs = list;
+    renderJobs(list.slice(0, 20));
+  } catch(e){ toast('فشل تحميل الوظائف', 'bad'); }
+}
+
+function renderJobs(list){
+  if(!list.length){ $('#jobs-list').innerHTML = '<div class="empty">لا توجد وظائف</div>'; return; }
+  $('#jobs-list').innerHTML = list.map(j => `
+    <div class="job">
+      <div class="top">
+        <div>
+          <h3>${esc(j.title)}</h3>
+          <p style="color:var(--mu);font-size:.85rem;margin-top:4px">${esc(j.sector)} • ${esc(j.level)}</p>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        ${(j.skills||[]).map(s => `<span class="tag">${esc(s)}</span>`).join('')}
+      </div>
+      <p style="margin-top:10px;font-size:.85rem;color:var(--mu)">${esc(j.description || '')}</p>
+    </div>
+  `).join('');
+}
+
+$('#job-filter').oninput = e => {
+  const q = e.target.value.toLowerCase();
+  const limit = +$('#job-limit').value;
+  const filtered = (window.__allJobs || []).filter(j =>
+    j.title.toLowerCase().includes(q) || j.sector.toLowerCase().includes(q)
+  ).slice(0, limit);
+  renderJobs(filtered);
+};
+$('#job-limit').onchange = () => $('#job-filter').dispatchEvent(new Event('input'));
+
+/* ============================================================
+   Announcements
+   ============================================================ */
+async function loadAnnouncements(){
+  try {
+    const res = await api('/api/job-posts');
+    const root = $('#announcements-list');
+    if(!res || !res.length){
+      root.innerHTML = '<div class="empty">لا توجد إعلانات منشورة حاليًا.</div>';
+      return;
+    }
+    root.innerHTML = res.map(p => `
+      <div class="job" style="border-right:4px solid var(--ok)">
+        <div class="top">
+          <div>
+            <h3>${esc(p.title)}</h3>
+            <p style="color:var(--mu);font-size:.85rem;margin-top:4px">
+              <span class="tag ok">${esc(p.type)}</span>
+              ${p.specialty ? `<span class="tag">${esc(p.specialty)}</span>` : ''}
+            </p>
+          </div>
+        </div>
+        <p style="margin-top:10px;font-size:.9rem;white-space:pre-wrap">${esc(p.details)}</p>
+        ${p.contact ? `<p class="smallmuted" style="margin-top:8px">📞 ${esc(p.contact)}</p>` : ''}
+      </div>
+    `).join('');
+  } catch(e){
+    $('#announcements-list').innerHTML = '<div class="empty">فشل تحميل الإعلانات</div>';
+  }
+}
+
+$('#job-post-form').onsubmit = async e => {
+  e.preventDefault();
+  const payload = {
+    title: $('#jp-title').value.trim(),
+    type: $('#jp-type').value.trim(),
+    details: $('#jp-details').value.trim(),
+    contact: $('#jp-contact').value.trim(),
+    specialty: $('#jp-specialty').value.trim()
+  };
+  const status = $('#jp-status');
+  status.textContent = 'جارٍ الإرسال...';
+  try {
+    const res = await apiPost('/api/job-posts', payload);
+    if(res.id){
+      status.textContent = '✅ ' + res.message;
+      toast('تم إرسال الإعلان للمراجعة', 'ok');
+      e.target.reset();
+    } else {
+      status.textContent = '❌ حدث خطأ غير متوقع.';
+    }
+  } catch(err){
+    status.textContent = '❌ حدث خطأ، حاول لاحقًا.';
+    toast('فشل إرسال الإعلان', 'bad');
+  }
+};
+
+/* ============================================================
+   Admin: 5-tap on logo
+   ============================================================ */
+let logoTapCount = 0;
+let logoTapTimer = null;
+
+$('#mainLogo').addEventListener('click', () => {
+  logoTapCount++;
+  clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1800);
+  if(logoTapCount >= 5){
+    logoTapCount = 0;
+    if(adminToken) openAdminPanel();
+    else openAdminModal();
+  }
+});
+
+function openAdminModal(){
+  $('#admin-modal').classList.add('show');
+  setTimeout(() => $('#admin-user').focus(), 100);
+}
+function closeAdminModal(){
+  $('#admin-modal').classList.remove('show');
+  $('#admin-login-status').textContent = '';
+  $('#admin-login-form').reset();
+}
+
+$('#admin-login-form').onsubmit = async (e) => {
+  e.preventDefault();
+  const username = $('#admin-user').value.trim();
+  const password = $('#admin-pass').value;
+  const status = $('#admin-login-status');
+  status.textContent = 'جارٍ التحقق...';
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    });
+    if(!res.ok) throw new Error('بيانات الدخول غير صحيحة');
+    const data = await res.json();
+    adminToken = data.access_token;
+    localStorage.setItem('compass_admin_token', adminToken);
+    closeAdminModal();
+    openAdminPanel();
+    toast('✅ مرحبًا بك في لوحة التحكم', 'ok');
+  } catch(err){
+    status.textContent = '❌ ' + err.message;
+  }
+};
+
+async function openAdminPanel(){
+  $('#admin-panel').classList.add('show');
+  await loadAdminPosts();
+}
+
+function closeAdminPanel(){
+  $('#admin-panel').classList.remove('show');
+  adminToken = null;
+  localStorage.removeItem('compass_admin_token');
+  toast('تم تسجيل الخروج');
+}
+
+async function loadAdminPosts(){
+  $('#admin-pending-list').innerHTML = '<div class="empty">جارٍ التحميل...</div>';
+  $('#admin-approved-list').innerHTML = '<div class="empty">جارٍ التحميل...</div>';
+  try {
+    const res = await fetch('/api/admin/job-posts', {
+      headers: {'Authorization': 'Bearer ' + adminToken}
+    });
+    if(!res.ok){
+      if(res.status === 401){
+        closeAdminPanel();
+        toast('انتهت الجلسة', 'bad');
+        return;
+      }
+      throw new Error('failed');
+    }
+    const data = await res.json();
+    renderAdminPending(data.pending || []);
+    renderAdminApproved(data.approved || []);
+  } catch(e){
+    $('#admin-pending-list').innerHTML = '<div class="empty">فشل التحميل</div>';
+    $('#admin-approved-list').innerHTML = '<div class="empty">فشل التحميل</div>';
+  }
+}
+
+function renderAdminPending(list){
+  const root = $('#admin-pending-list');
+  if(!list.length){ root.innerHTML = '<div class="empty">لا توجد إعلانات معلقة 🎉</div>'; return; }
+  root.innerHTML = list.map(p => `
+    <div class="admin-post">
+      <div class="head">
+        <div>
+          <b style="font-size:1.05rem">${esc(p.title)}</b>
+          <span class="tag">${esc(p.type)}</span>
+          ${p.specialty ? `<span class="tag ok">${esc(p.specialty)}</span>` : ''}
+        </div>
+        <div class="admin-actions">
+          <button class="btn good" onclick="approvePost(${p.id})">✅ اعتماد</button>
+          <button class="btn bad" onclick="deletePost(${p.id})">🗑️ حذف</button>
+        </div>
+      </div>
+      <p style="white-space:pre-wrap;margin:8px 0">${esc(p.details)}</p>
+      <p class="smallmuted">📞 ${esc(p.contact || '—')}</p>
+    </div>
+  `).join('');
+}
+
+function renderAdminApproved(list){
+  const root = $('#admin-approved-list');
+  if(!list.length){ root.innerHTML = '<div class="empty">لا توجد إعلانات معتمدة</div>'; return; }
+  root.innerHTML = list.map(p => `
+    <div class="admin-post">
+      <div class="head">
+        <div>
+          <b style="font-size:1.05rem">${esc(p.title)}</b>
+          <span class="tag ok">${esc(p.type)}</span>
+        </div>
+        <button class="btn bad" onclick="deletePost(${p.id})">🗑️ حذف</button>
+      </div>
+      <p style="white-space:pre-wrap;margin:8px 0">${esc(p.details)}</p>
+      <p class="smallmuted">📞 ${esc(p.contact || '—')}</p>
+    </div>
+  `).join('');
+}
+
+window.approvePost = async (id) => {
+  try {
+    const res = await fetch(`/api/admin/approve/${id}`, {
+      method: 'POST',
+      headers: {'Authorization': 'Bearer ' + adminToken}
+    });
+    if(!res.ok) throw new Error();
+    toast('✅ تم اعتماد الإعلان', 'ok');
+    await loadAdminPosts();
+    loadAnnouncements();
+  } catch(e){ toast('فشل الاعتماد', 'bad'); }
+};
+
+window.deletePost = async (id) => {
+  if(!confirm('حذف هذا الإعلان نهائيًا؟')) return;
+  try {
+    const res = await fetch(`/api/admin/delete/${id}`, {
+      method: 'DELETE',
+      headers: {'Authorization': 'Bearer ' + adminToken}
+    });
+    if(!res.ok) throw new Error();
+    toast('🗑️ حُذف الإعلان');
+    await loadAdminPosts();
+    loadAnnouncements();
+  } catch(e){ toast('فشل الحذف', 'bad'); }
+};
+
+document.querySelector('nav button[data-tab="announcements"]')
+  .addEventListener('click', loadAnnouncements);
+
+/* ============================================================
+   Boot
+   ============================================================ */
+applyLang(currentLang);
+init();
+</script>
+</body>
+</html>
